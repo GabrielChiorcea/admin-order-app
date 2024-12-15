@@ -27,10 +27,12 @@ const AvailableMeals = () => {
           name: responseData[key].name,
           description: responseData[key].description,
           price: responseData[key].price,
+          availability: responseData[key].availability,
         });
       }
 
       setMeals(loadedMeals);
+
     };
 
     fetchMeals().catch((error) => {
@@ -53,6 +55,7 @@ const AvailableMeals = () => {
       name={meal.name}
       description={meal.description}
       price={meal.price}
+      availability={meal.availability}
     />
   ));
 

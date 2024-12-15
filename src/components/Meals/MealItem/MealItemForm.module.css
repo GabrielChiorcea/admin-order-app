@@ -18,3 +18,12 @@
   background-color: #FFC244	;
   border-color: #FFC244	;
 }
+
+.unavailable{
+  display: inline-block;
+  padding: 5px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: rgba(171, 7, 7, 0.718);
+  border-radius: 5px;
+}

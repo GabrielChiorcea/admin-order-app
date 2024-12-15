@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase'
 import { useNavigate } from 'react-router-dom';
 import classes from './Login.module.css';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../../store/cart-slice';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const submitHandler = (event) => {
+
+  const submitHandler = async (event) => {
     event.preventDefault();
-    // Aici poți adăuga logica de autentificare
-    console.log('Email:', email);
-    console.log('Password:', password);
-    // După autentificare cu succes, redirecționează utilizatorul
-    navigate('/admin');
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;        
+        if (user) {
+            dispatch(cartActions.loginAdmin(true)); // Setează starea de autentificare în Redux
+        }else{
+            console.log('User not authenticated');
+        }
+      } catch (error) {
+        // setError(error.message);
+      }
   };
 
   return (

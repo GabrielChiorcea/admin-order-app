@@ -5,10 +5,11 @@ import Meals from './components/Meals/Meals';
 import Cart from './components/Cart/Cart';
 import Admin from './components/AdminPanel/Admin';
 import Login from './components/AdminPanel/Login'; // Importă componenta Login
+import { useSelector } from 'react-redux';
 
 const App = () => {
+  const isAdmin = useSelector(state => state.cart.isAdmin); // Selectează starea isAdmin din store
   const [cartIsShown, setCartIsShown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Starea pentru autentificare
 
   const showCartHandler = () => {
     setCartIsShown(true);
@@ -18,9 +19,7 @@ const App = () => {
     setCartIsShown(false);
   };
 
-  const loginHandler = () => {
-    setIsLoggedIn(true);
-  };
+
 
   return (
     <>
@@ -29,8 +28,9 @@ const App = () => {
       <main>
         <Routes>
           <Route path="/" element={<Meals />} />
-          <Route path="/login" element={<Login onLogin={loginHandler} />} />
-          <Route path="/admin" element={isLoggedIn ? <Admin /> : <Navigate to="/login" />} />
+          <Route path="/login" element={isAdmin ? <Navigate to="/admin"/> : <Login  />} />
+          <Route path="/admin" element={isAdmin ? <Admin /> : <Navigate to="/login" />} />
+
         </Routes>
       </main>
     </>

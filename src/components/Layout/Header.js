@@ -1,15 +1,20 @@
 import { Fragment } from 'react';
 
 import HeaderCartButton from './HeaderCartButton';
+import HeaderAdminButton from './HeaderAdminButton';
 import mealsImage from '../../assets/meals.jpg';
 import classes from './Header.module.css';
+import { useSelector } from 'react-redux';
 
 const Header = (props) => {
+
+  const isAdmin = useSelector(state => state.cart.isAdmin); // Selectează starea isAdmin din store
+
   return (
     <Fragment>
       <header className={classes.header}>
         <h1>ReactMeals</h1>
-        <HeaderCartButton onClick={props.onShowCart} />
+        {!isAdmin ? <HeaderCartButton onClick={props.onShowCart} /> : <HeaderAdminButton />} {/* Afișează butonul corespunzător */}
       </header>
       <div className={classes['main-image']}>
         <img src={mealsImage} alt='A table full of delicious food!' />

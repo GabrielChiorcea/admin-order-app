@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialCartState = {
   items: [],
   totalAmount: 0,
+  isAdmin: false,
+  
 };
 
 const cartSlice = createSlice({
@@ -38,6 +40,9 @@ const cartSlice = createSlice({
       state.items = [];
       state.totalAmount = 0;
     },
+    loginAdmin(state, action) {
+      state.isAdmin = action.payload;
+    }
   },
 });
 

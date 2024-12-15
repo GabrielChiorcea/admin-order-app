@@ -1,11 +1,17 @@
 // src/components/Admin/Admin.js
 import React from 'react';
+import Products from './Products';
+import Orders from './Orders';
 
 const Admin = () => {
+
+
+
+
   return (
     <div>
-      <h1>Admin Page</h1>
-      {/* Conținutul paginii de administrare */}
+      <Products/>
+      <Orders/>
     </div>
   );
 };
