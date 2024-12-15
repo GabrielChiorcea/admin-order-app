@@ -9,53 +9,97 @@ import Box from '@mui/material/Box';
 import classes from './Products.module.css';
 
 export default function Orders() {
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     // Fetch data from your database
     const fetchData = async () => {
-      const response = await fetch('https://order-app-8c499-default-rtdb.firebaseio.com/products.json');
+      const response = await fetch('https://order-app-8c499-default-rtdb.firebaseio.com/orders.json');
       const data = await response.json();
-      const loadedProducts = [];
+      const loadedOrders = {};
 
       for (const key in data) {
-        loadedProducts.push({
-          id: key,
-          name: data[key].name,
-          description: data[key].description,
-          price: data[key].price,
+        const orderItems = data[key].orderedItems;
+        const user = data[key].user;
+
+        if (!loadedOrders[user.name]) {
+          loadedOrders[user.name] = {
+            userName: user.name,
+            city: user.city,
+            street: user.street,
+            items: [],
+            grandTotal: 0
+          };
+        }
+
+        orderItems.forEach((item) => {
+          loadedOrders[user.name].items.push({
+            food: item.name,
+            total: item.price * item.amount,
+            amount: item.amount,
+          });
         });
       }
 
-      setProducts(loadedProducts);
+      setOrders(Object.values(loadedOrders));
     };
 
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const updatedOrders = orders.map(order => {
+      let firstTotal = 0;
+      let secondTotal = 0;
+
+      order.items.forEach(item => {
+        if (firstTotal === 0) {
+          firstTotal += item.total;
+        } else {
+          secondTotal += item.total;
+        }
+      });
+      let grandTotal = firstTotal + secondTotal;
+      return { ...order, grandTotal };
+    });
+
+    setOrders(updatedOrders);
+  }, [orders]);
+
   return (
     <div className={classes.productsContainer}>
       <Box sx={{ flexGrow: 1, padding: '2rem' }}>
         <Grid container spacing={3}>
-          {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+          {orders.map((order, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                    {product.name}
+                    {order.userName}
                   </Typography>
                   <Typography variant="h5" component="div">
-                    {product.description}
+                    {order.city}
                   </Typography>
+                  <Typography variant="h5" component="div">
+                    {order.street}
+                  </Typography>
+                  {order.items.map((item, idx) => (
+                    <div key={idx}
+                    style={{border:'2px, solid, #00A082', borderRadius:'14px', marginBottom:'5px', padding:'5px'}}> 
+                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                        {item.food}
+                      </Typography>
+                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                        Amount: {item.amount}
+                      </Typography>
+                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                        Total: ${item.total.toFixed(2)}
+                      </Typography>
+                    </div>
+                  ))}
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                    {/* ${product.price.toFixed(2)} */}
-                    {product.price}
-                  </Typography>
-                  <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
+                    First Total: {order.grandTotal + ' $'} 
+                  </Typography> 
                 </CardContent>
                 <CardActions>
                   <Button variant="contained" color="primary" style={{ marginRight: '8px' }}>

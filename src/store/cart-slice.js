@@ -3,8 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialCartState = {
   items: [],
   totalAmount: 0,
-  isAdmin: false,
-  
+  isAdmin: true,
+  stockButton: false,
+  productButton: false,
+  orderButton: true
+
 };
 
 const cartSlice = createSlice({
@@ -42,6 +45,18 @@ const cartSlice = createSlice({
     },
     loginAdmin(state, action) {
       state.isAdmin = action.payload;
+    },
+
+    setStockButton(state, action) {
+      state.stockButton = action.payload;
+    },
+
+    setProductButton(state, action) {
+      state.productButton = action.payload;
+    },
+
+    setOrderButton(state, action) {
+      state.orderButton = action.payload;
     }
   },
 });
