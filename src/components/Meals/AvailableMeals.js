@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Card from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import classes from './AvailableMeals.module.css';
 
+
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [errorBase, setErrorBase] = useState(null);
+
+
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -32,13 +35,14 @@ const AvailableMeals = () => {
       }
 
       setMeals(loadedMeals);
-
     };
 
     fetchMeals().catch((error) => {
       setErrorBase(error.message); // Setează mesajul de eroare
     });
   }, []);
+
+
 
   if (errorBase) {
     return (

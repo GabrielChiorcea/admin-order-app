@@ -28,7 +28,6 @@ export default function Orders() {
             city: user.city,
             street: user.street,
             items: [],
-            grandTotal: 0
           };
         }
 
@@ -47,71 +46,71 @@ export default function Orders() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const updatedOrders = orders.map(order => {
-      let firstTotal = 0;
-      let secondTotal = 0;
-
-      order.items.forEach(item => {
-        if (firstTotal === 0) {
-          firstTotal += item.total;
-        } else {
-          secondTotal += item.total;
-        }
-      });
-      let grandTotal = firstTotal + secondTotal;
-      return { ...order, grandTotal };
-    });
-
-    setOrders(updatedOrders);
-  }, [orders]);
-
   return (
     <div className={classes.productsContainer}>
       <Box sx={{ flexGrow: 1, padding: '2rem' }}>
         <Grid container spacing={3}>
-          {orders.map((order, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                    {order.userName}
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    {order.city}
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    {order.street}
-                  </Typography>
-                  {order.items.map((item, idx) => (
-                    <div key={idx}
-                    style={{border:'2px, solid, #00A082', borderRadius:'14px', marginBottom:'5px', padding:'5px'}}> 
-                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                        {item.food}
-                      </Typography>
-                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                        Amount: {item.amount}
-                      </Typography>
-                      <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                        Total: ${item.total.toFixed(2)}
-                      </Typography>
-                    </div>
-                  ))}
-                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-                    First Total: {order.grandTotal + ' $'} 
-                  </Typography> 
-                </CardContent>
-                <CardActions>
-                  <Button variant="contained" color="primary" style={{ marginRight: '8px' }}>
-                    empty stoc
-                  </Button>
-                  <Button variant="contained" color="secondary">
-                    set busy
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+          {orders.map((order, index) => {
+            let firstTotal = 0;
+            let secondTotal = 0;
+
+            order.items.forEach(item => {
+              if (firstTotal === 0) {
+                firstTotal += item.total;
+              } else {
+                secondTotal += item.total;
+              }
+            });
+
+            const grandTotal = firstTotal + secondTotal;
+
+            return (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+                      {order.userName}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      {order.city}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      {order.street}
+                    </Typography>
+                    {order.items.map((item, idx) => (
+                      <div key={idx}
+                      
+                      style={{border:'2px, solid, #00A082', borderRadius:'14px', marginBottom:'5px', padding:'5px'}}> 
+
+
+                      
+                        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                          {item.food}
+                        </Typography>
+                        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                          Amount: {item.amount}
+                        </Typography>
+                        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                          Total: ${item.total.toFixed(2)}
+                        </Typography>
+                      </div>
+                    ))}
+                    <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+                      Grand Total: ${grandTotal.toFixed(2)}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button variant="contained" color="primary" style={{ marginRight: '8px' }}>
+                      empty stoc
+                    </Button>
+                    <Button variant="contained" color="secondary">
+                      set busy
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
     </div>

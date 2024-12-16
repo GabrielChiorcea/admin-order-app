@@ -6,19 +6,33 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import classes from './Products.module.css';
+import { useSelector } from 'react-redux';
 
-function renderRow(props) {
-  const { index, style, data } = props;
+function RenderRow({ index, style, data, updateFoodItemAvailability }) {
   const item = data[index];
 
   return (
     <ListItem style={style} key={index} component="div" disablePadding>
       <ListItemButton>
         <ListItemText primary={item.name} />
-        <Button variant="contained" color="primary" style={{ marginRight: '8px' }}>
-          empty stoc
-        </Button>
-        <Button variant="contained" color="secondary">
+        {item.availability ? (
+          <Button
+            onClick={() => updateFoodItemAvailability(item.id, item.availability)}
+            variant="contained"
+            style={{ marginRight: '8px', backgroundColor: 'red' }}
+          >
+            set empty stock
+          </Button>
+        ) : (
+          <Button
+            onClick={() => updateFoodItemAvailability(item.id, item.availability)}
+            variant="contained"
+            style={{ marginRight: '8px', backgroundColor: 'green' }}
+          >
+            set back in stock
+          </Button>
+        )}
+        <Button variant="contained" color="primary">
           set busy
         </Button>
       </ListItemButton>
@@ -27,30 +41,49 @@ function renderRow(props) {
 }
 
 export default function VirtualizedList() {
-  const [products, setProducts] = useState([]);
+  const meals = useSelector((state) => state.cart.meals);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [availabilityState, setAvailabilityState] = useState(
+    meals.reduce((acc, meal) => {
+      acc[meal.id] = meal.availability;
+      return acc;
+    }, {})
+  );
 
-  useEffect(() => {
-    // Fetch data from your database
-    const fetchData = async () => {
-      const response = await fetch('https://order-app-8c499-default-rtdb.firebaseio.com/products.json');
-      const data = await response.json();
-      const loadedProducts = [];
+  const updateFoodItemAvailability = async (id, currentAvailability) => {
+    const newAvailability = !currentAvailability;
+    setAvailabilityState((prevState) => ({
+      ...prevState,
+      [id]: newAvailability,
+    }));
 
-      for (const key in data) {
-        loadedProducts.push({
-          id: key,
-          name: data[key].name
-        });
+    try {
+      const response = await fetch(`https://order-app-8c499-default-rtdb.firebaseio.com/food/${id}/availability.json`, {
+        method: 'PUT',
+        body: JSON.stringify(newAvailability),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      } else {
+        setSuccessMessage('Item availability updated');
       }
-
-      setProducts(loadedProducts);
-    };
-
-    fetchData();
-  }, []);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
+    <>      
+      {error && <p>{error}</p>}
+      {successMessage && <p>{successMessage}</p>}
     <div className={classes.productsContainer}>
+
+
       <Box
         sx={{ 
           display: 'flex',
@@ -68,15 +101,26 @@ export default function VirtualizedList() {
           height={400}
           width='90%'
           itemSize={46}
-          itemCount={products.length}
-          itemData={products} // Pass the products data to the list
+          itemCount={meals.length}
+          itemData={meals.map(meal => ({
+            ...meal,
+            availability: availabilityState[meal.id]
+          }))}
           overscanCount={5}
           style={{ backgroundColor: 'white', borderRadius: '14px' }} 
         >
-          {({ index, style, data }) => renderRow({ index, style, data })}
+          {({ index, style, data }) => (
+            <RenderRow
+              index={index}
+              style={style}
+              data={data}
+              updateFoodItemAvailability={updateFoodItemAvailability}
+            />
+          )}
         </FixedSizeList>
       </Box>
     </div>
+    </>
   );
 }
 

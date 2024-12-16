@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialCartState = {
   items: [],
+  meals: [],
   totalAmount: 0,
   isAdmin: true,
   stockButton: false,
@@ -37,6 +38,19 @@ const cartSlice = createSlice({
         state.items = state.items.filter(item => item.id !== id);
       } else {
         existingItem.amount--;
+      }
+    },
+    addMeal(state, action) {
+      const newMeal = action.payload;
+      const existingMeal = state.meals.find(meal => meal.id === newMeal.id);
+      if (!existingMeal) {
+        state.meals.push({
+          id: newMeal.id,
+          name: newMeal.name,
+          description: newMeal.description,
+          price: newMeal.price,
+          availability: newMeal.availability,
+        });
       }
     },
     clearCart(state) {
