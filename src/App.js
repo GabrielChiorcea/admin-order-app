@@ -32,10 +32,11 @@ const App = () => {
           id: key,
           name: responseData[key].name,
           description: responseData[key].description,
-          price: responseData[key].price,
+          price: Number(responseData[key].price),
           availability: responseData[key].availability,
         }))
       }
+
 
     }
     fetchMeals().catch((error) => {

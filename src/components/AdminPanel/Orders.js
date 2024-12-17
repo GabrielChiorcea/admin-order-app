@@ -100,12 +100,11 @@ export default function Orders() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button variant="contained" color="primary" style={{ marginRight: '8px' }}>
-                      empty stoc
+                    <Button variant="contained"            
+                     style={{ marginRight: '8px', backgroundColor: '#FFC244' }}>
+                      Accesp order
                     </Button>
-                    <Button variant="contained" color="secondary">
-                      set busy
-                    </Button>
+                    
                   </CardActions>
                 </Card>
               </Grid>

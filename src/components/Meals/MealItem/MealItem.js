@@ -6,7 +6,7 @@ import classes from './MealItem.module.css';
 const MealItem = (props) => {
   const dispatch = useDispatch();
 
-  const price = `$${props.price.toFixed(2)}`;
+  const price = `$${props.price}`;
 
   const addToCartHandler = (amount) => {
     dispatch(cartActions.addItem({

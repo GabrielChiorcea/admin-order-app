@@ -7,11 +7,14 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import classes from './Products.module.css';
 import { useSelector } from 'react-redux';
+import  Modal  from '../UI/Modal';
 
 function RenderRow({ index, style, data, updateFoodItemAvailability }) {
   const item = data[index];
 
   return (
+
+    
     <ListItem style={style} key={index} component="div" disablePadding>
       <ListItemButton>
         <ListItemText primary={item.name} />
@@ -44,6 +47,7 @@ export default function VirtualizedList() {
   const meals = useSelector((state) => state.cart.meals);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [availabilityState, setAvailabilityState] = useState(
     meals.reduce((acc, meal) => {
       acc[meal.id] = meal.availability;
@@ -70,7 +74,8 @@ export default function VirtualizedList() {
       if (!response.ok) {
         throw new Error('Something went wrong!');
       } else {
-        setSuccessMessage('Item availability updated');
+        setSuccessMessage('Product successfully updated ');
+        setIsModalOpen(true);
       }
     } catch (error) {
       setError(error.message);
@@ -78,11 +83,23 @@ export default function VirtualizedList() {
   };
 
   return (
-    <>      
-      {error && <p>{error}</p>}
-      {successMessage && <p>{successMessage}</p>}
+    <>
+     { (isModalOpen) && 
+    <div className={classes.overlayConainer}>      
+      <Modal > 
+        <div className={classes.modalContent}>
+          {successMessage}       
+            <Button 
+            style={{ backgroundColor: '#FFC244' }}
+            variant="contained"  
+            onClick={() => setIsModalOpen(false)}> 
+                colose
+            </Button>
+          </div>
+       </Modal>
+      </div>}
+    
     <div className={classes.productsContainer}>
-
 
       <Box
         sx={{ 
@@ -120,6 +137,7 @@ export default function VirtualizedList() {
         </FixedSizeList>
       </Box>
     </div>
+    
     </>
   );
 }

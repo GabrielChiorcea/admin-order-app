@@ -4,6 +4,7 @@ import Products from './Products';
 import Orders from './Orders';
 
 import { useSelector } from 'react-redux';
+import AddProduct from './AddProduct';
 
 const Admin = () => {
 
@@ -16,6 +17,7 @@ const Admin = () => {
       
       { (!stock && !product && order) && <Orders/>}
       {(stock && !product) && <Products/>}
+      {(!stock && order && product) && <AddProduct/>}
     </div>
   );
 };
