@@ -10,11 +10,13 @@ import classes from './Products.module.css';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     // Fetch data from your database
     const fetchData = async () => {
-      const response = await fetch('https://order-app-8c499-default-rtdb.firebaseio.com/orders.json');
+      const response = await fetch(`${apiUrl}/orders.json`);
       const data = await response.json();
       const loadedOrders = {};
 

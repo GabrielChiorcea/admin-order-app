@@ -7,6 +7,8 @@ import classes from './Cart.module.css';
 import Checkout from './Checkout';
 
 const Cart = (props) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
@@ -32,7 +34,7 @@ const Cart = (props) => {
   const submitOrderHandler = async (userData) => {
     setIsSubmitting(true);
     await fetch(
-      'https://order-app-8c499-default-rtdb.firebaseio.com/orders.json',
+      `${apiUrl}/orders.json`,
       {
         method: 'POST',
         body: JSON.stringify({

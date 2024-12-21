@@ -4,7 +4,7 @@ const initialCartState = {
   items: [],
   meals: [],
   totalAmount: 0,
-  isAdmin: true,
+  isAdmin: false,
   stockButton: false,
   productButton: false,
   orderButton: true

@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyBVpP4g6eTCjQUZaO1rW6BZgD4Q4NPR8js",
     authDomain: "order-app-8c499.firebaseapp.com",

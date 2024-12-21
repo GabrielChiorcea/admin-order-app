@@ -1,61 +1,70 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase'
-import { useNavigate } from 'react-router-dom';
-import classes from './Login.module.css';
+import { auth } from '../../firebase';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../../store/cart-slice';
-
+import { useNavigate } from 'react-router-dom';
+import classes from './Login.module.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   const submitHandler = async (event) => {
     event.preventDefault();
+    setError(null);
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;        
-        if (user) {
-            dispatch(cartActions.loginAdmin(true)); // Setează starea de autentificare în Redux
-        }else{
-            console.log('User not authenticated');
-        }
-      } catch (error) {
-        // setError(error.message);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      if (user) {
+        dispatch(cartActions.loginAdmin(true));
+        navigate('/dashboard');
       }
+    } catch (error) {
+      setError('Invalid email or password!');
+    }
   };
 
   return (
-    <div className={classes.login}>
-      <h2>Login</h2>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-        <div className={classes.actions}>
-          <button type="submit">Login</button>
-        </div>
-      </form>
+    <div className={classes.loginContainer}>
+      <div className={classes.loginCard}>
+        <h2 className={classes.loginTitle}>Admin Login</h2>
+        <form onSubmit={submitHandler}>
+          <div className={classes.formControl}>
+            <label htmlFor="email" className={classes.formLabel}>
+              Email
+            </label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={classes.formInput}
+              required
+            />
+          </div>
+          <div className={classes.formControl}>
+            <label htmlFor="password" className={classes.formLabel}>
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={classes.formInput}
+              required
+            />
+          </div>
+          {error && <p className={classes.errorText}>{error}</p>}
+          <button type="submit" className={classes.loginButton}>
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

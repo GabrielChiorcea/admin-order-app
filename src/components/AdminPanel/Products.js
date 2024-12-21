@@ -44,6 +44,7 @@ function RenderRow({ index, style, data, updateFoodItemAvailability }) {
 }
 
 export default function VirtualizedList() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const meals = useSelector((state) => state.cart.meals);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -63,7 +64,7 @@ export default function VirtualizedList() {
     }));
 
     try {
-      const response = await fetch(`https://order-app-8c499-default-rtdb.firebaseio.com/food/${id}/availability.json`, {
+      const response = await fetch(`${apiUrl}/food/${id}/availability.json`, {
         method: 'PUT',
         body: JSON.stringify(newAvailability),
         headers: {

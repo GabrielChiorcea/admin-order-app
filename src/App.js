@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cartActions } from './store/cart-slice';
 
 const App = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const isAdmin = useSelector(state => state.cart.isAdmin); // Selectează starea isAdmin din store
   const [cartIsShown, setCartIsShown] = useState(false);
   const dispatch = useDispatch();
@@ -17,7 +19,7 @@ const App = () => {
   useEffect(() => {  
     const fetchMeals = async () => {
       const response = await fetch(
-        'https://order-app-8c499-default-rtdb.firebaseio.com/food.json'
+        `${apiUrl}/food.json`
       );
 
       if (!response.ok) {

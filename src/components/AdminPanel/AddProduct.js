@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../UI/Modal";
 import classes from './AddProduct.module.css';
+import Button from '@mui/material/Button';
 
 // Componente stilizate cu Styled Components
 const Container = styled.div`
@@ -83,7 +84,7 @@ const Select = styled.select`
   }
 `;
 
-const Button = styled.button`
+const Buttons = styled.button`
   width: 100%;
   background-color: #75571d;
   color: #ffffff;
@@ -101,8 +102,9 @@ const Button = styled.button`
 `;
 
 const ProductForm = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("Product successfully added!");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -130,7 +132,7 @@ const ProductForm = () => {
     // Salvare date in baza de date
     const fetchData = async () => {
       try {
-        const response = await fetch("https://order-app-8c499-default-rtdb.firebaseio.com/food.json", {
+        const response = await fetch(`${apiUrl}/food.json`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -223,7 +225,7 @@ const ProductForm = () => {
             <option value="true">Available</option>
             <option value="false">Not Available</option>
         </Select>
-          <Button type="submit">Create Product</Button>
+          <Buttons type="submit">Create Product</Buttons>
         </form>
       </FormWrapper>
     </Container>

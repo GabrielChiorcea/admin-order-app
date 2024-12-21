@@ -11,13 +11,13 @@ const Header = (props) => {
   const isAdmin = useSelector(state => state.cart.isAdmin); // Selectează starea isAdmin din store
 
   return (
-    <Fragment>
+    <Fragment>  
       <header className={classes.header}>
-        <h1>ReactMeals</h1>
+        {!isAdmin ?  <h1>Meals</h1> : <h1>Admin Panel</h1>} {/* Afișează titlul corespunzător */}
         {!isAdmin ? <HeaderCartButton onClick={props.onShowCart} /> : <HeaderAdminButton />} {/* Afișează butonul corespunzător */}
       </header>
       <div className={classes['main-image']}>
-        <img src={mealsImage} alt='A table full of delicious food!' />
+        <img src={mealsImage}/>
       </div>
     </Fragment>
   );
