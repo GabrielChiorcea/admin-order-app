@@ -18,13 +18,6 @@ React Meals is a web-based food ordering application developed using React and F
 
 Admins can manage products, updating their availability directly from the application interface. Administrative features are protected and accessible only to authorized users.
 
-<div class="image columns-1 sm:columns-2 gap-8">
-
-![React 03.](/images/project/07-02.jpg)
-![React 03.](/images/project/07-03.jpg)
-![React 03.](/images/project/07-04.jpg)
-
-</div>
 
 ## Technologies Used
 1. React: The main library used for building the user interface.
