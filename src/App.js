@@ -11,7 +11,7 @@ import { cartActions } from './store/cart-slice';
 const App = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const isAdmin = useSelector(state => state.cart.isAdmin); // Selectează starea isAdmin din store
+  const isAdmin = useSelector(state => state.cart.isAdmin); 
   const [cartIsShown, setCartIsShown] = useState(false);
   const dispatch = useDispatch();
 
